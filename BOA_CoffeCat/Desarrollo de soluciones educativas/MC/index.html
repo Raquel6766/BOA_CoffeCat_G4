@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Iniciar Sesión</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="login-style.css" />
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <!-- Panel izquierdo -->
+            <div class="col-md-6 left-panel text-center">
+                <h4>Bienvenido al sistema integrado de gestión institucional del colegio Miguel de Cervantes.</h4>
+                <img src="fr.jpeg" alt="fr" class="img-fluid img-border-blur" style="max-width: 300px;">
+            </div>
+
+            <!-- Panel derecho -->
+            <div class="col-md-6 right-panel">
+                <form id="loginForm">
+                    <div class="mb-4">
+                        <p>Inicia sesión con tu cuenta.</p>
+                        <label for="username" class="form-label">Usuario</label>
+                        <input type="text" id="username" class="form-control" placeholder="Ingresa tu usuario" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="password" class="form-label">Contraseña</label>
+                        <input type="password" id="password" class="form-control" placeholder="Ingresa tu contraseña" required>
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-custom">Iniciar Sesión</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="login-script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
