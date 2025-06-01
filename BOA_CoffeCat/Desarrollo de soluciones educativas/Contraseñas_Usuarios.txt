@@ -1,9 +1,0 @@
-Usuario
-admin
-Contraseña
-1234
-
-Usuario
-123456
-Contraseña
-estudiante
