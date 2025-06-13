@@ -98,5 +98,8 @@ class Asignatura {
         $stmt->execute([$id_asignatura]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
+
+
+
 }
 ?>

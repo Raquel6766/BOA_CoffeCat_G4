@@ -41,7 +41,7 @@
           <i class="bi bi-person-circle fs-4 me-2"></i>
         </a>
         <ul class="dropdown-menu dropdown-menu-end text-small" aria-labelledby="perfilDropdown">
-          <li><a class="dropdown-item" href="#">Mi perfil</a></li>
+          <li><a class="dropdown-item" href="../templates/perfil.php">Mi perfil</a></li>
           <li><hr class="dropdown-divider"></li>
           <li><a class="dropdown-item" href="../../controllers/LogoutController.php">Cerrar sesión</a></li>
         </ul>

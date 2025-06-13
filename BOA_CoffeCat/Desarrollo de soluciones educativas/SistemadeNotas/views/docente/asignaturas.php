@@ -24,6 +24,7 @@ include __DIR__ . '/../templates/header.php';
     <title>Mis Asignaturas</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 </head>
 <body>
 <div class="container-fluid">
@@ -38,6 +39,7 @@ include __DIR__ . '/../templates/header.php';
                         <th>Asignatura</th>
                         <th>Curso</th>
                         <th>Año Lectivo</th>
+                        <th>Acciones</th> <!-- Nueva columna -->
                     </tr>
                 </thead>
                 <tbody>
@@ -47,6 +49,11 @@ include __DIR__ . '/../templates/header.php';
                         <td><?= $a['nombre_asignatura'] ?></td>
                         <td><?= $a['grado'] ?></td>
                         <td><?= $a['anio_lectivo'] ?></td>
+                        <td>
+                            <a href="../docente/notasasignatura.php?id_asig_doc=<?= $a['id_asig_doc'] ?>" class="btn btn-primary btn-sm">
+                                <i class="bi bi-eye"></i>
+                            </a>
+                        </td>
                     </tr>
                     <?php endforeach; ?>
                 </tbody>

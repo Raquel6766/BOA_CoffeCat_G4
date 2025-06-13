@@ -122,9 +122,11 @@ SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 
 -- Roles
+SELECT * FROM rol_usuario;
 INSERT INTO rol_usuario (nombre_rol) VALUES
   ('admin'), ('docente'), ('estudiante');
 
+SELECT * FROM usuario;
 -- Usuarios: admin, 3 docentes, 8 estudiantes
 INSERT INTO usuario (nombre_usuario, contrasena, id_rol, primer_nombre, segundo_nombre, primer_apellido, segundo_apellido, correo, telefono) VALUES
   ('admin',     '$2y$10$pruebaAdminHash', 1, 'Raquel',  'Maria',    'Gonzalez',   'Perez',   'raquel.admin@demo.com',   '55510001'),
@@ -144,6 +146,7 @@ INSERT INTO usuario (nombre_usuario, contrasena, id_rol, primer_nombre, segundo_
   
 
 -- Cursos (dos grados, dos años lectivos)
+SELECT * FROM curso;
 INSERT INTO curso (grado, anio_lectivo) VALUES
   ('1ro A', 2025),
   ('1ro B', 2025),
@@ -153,6 +156,7 @@ INSERT INTO curso (grado, anio_lectivo) VALUES
   ('2do A', 2024);
 
 -- Asignaturas por curso
+SELECT * FROM asignatura;
 INSERT INTO asignatura (nombre_asignatura, id_curso) VALUES
   ('Matematicas', 1),
   ('Lengua y Literatura', 1),
@@ -166,6 +170,7 @@ INSERT INTO asignatura (nombre_asignatura, id_curso) VALUES
   ('Matematicas', 6);
 
 -- Docente imparte asignatura (asignatura_docente)
+SELECT * FROM asignatura_docente;
 INSERT INTO asignatura_docente (id_usuario_docente, id_asignatura) VALUES
   (2, 1),  -- docente1, Matematicas 1ro A 2025
   (2, 5),  -- docente1, Matematicas 2do A 2025
@@ -178,6 +183,7 @@ INSERT INTO asignatura_docente (id_usuario_docente, id_asignatura) VALUES
 
 -- 8 estudiantes inscritos en 1ro A 2025 (Matematicas y Lengua y Literatura)
 -- id_asig_doc: 1 (Matematicas), 5 (Lengua y Literatura)
+SELECT * FROM lista_participante;
 INSERT INTO lista_participante (id_usuario_estudiante, id_asig_doc) VALUES
   (5,1), (5,5),
   (6,1), (6,5),
@@ -197,6 +203,7 @@ INSERT INTO lista_participante (id_usuario_estudiante, id_asig_doc) VALUES
   (5,2), (6,2), (7,2), (8,2);
 
 -- Notas para Matematicas 1ro A 2025 (id_asig_doc: 1, lista_participante id=1 al 8)
+SELECT * FROM nota;
 INSERT INTO nota (valor_nota, comentarios, id_lista) VALUES
   (95, 'Excelente', 1),
   (87, 'Muy bien', 3),
@@ -389,4 +396,57 @@ SELECT DISTINCT c.id_curso, c.grado, c.anio_lectivo
             JOIN asignatura a ON c.id_curso = a.id_curso
             JOIN asignatura_docente ad ON a.id_asignatura = ad.id_asignatura
             WHERE ad.id_usuario_docente = 2
-            ORDER BY c.anio_lectivo DESC, c.grado
+            ORDER BY c.anio_lectivo DESC, c.grado;
+            
+            
+-- Aqui estaran precentes las vistas--
+
+-- muestra los usuarios con rol
+CREATE OR REPLACE VIEW vista_usuarios_con_rol AS
+SELECT u.id_usuario, u.nombre_usuario, u.correo, r.nombre_rol
+FROM usuario u
+JOIN rol_usuario r ON u.id_rol = r.id_rol;
+SELECT * FROM vista_usuarios_con_rol;
+
+-- muestra todas las notas completas
+CREATE OR REPLACE VIEW vista_notas_completas AS
+SELECT n.id_nota, n.valor_nota, n.comentarios,
+       CONCAT(e.primer_nombre, ' ', IFNULL(e.segundo_nombre, ''), ' ', e.primer_apellido, ' ', IFNULL(e.segundo_apellido, '')) AS estudiante,
+       a.nombre_asignatura
+FROM nota n
+JOIN lista_participante lp ON n.id_lista = lp.id_lista
+JOIN usuario e ON lp.id_usuario_estudiante = e.id_usuario
+JOIN asignatura_docente ad ON lp.id_asig_doc = ad.id_asig_doc
+JOIN asignatura a ON ad.id_asignatura = a.id_asignatura;
+SELECT * FROM vista_notas_completas;
+
+-- prodecimiento de almacenado --
+
+DELIMITER //
+
+CREATE PROCEDURE obtener_usuarios_por_rol(IN rol_id INT)
+BEGIN
+    SELECT * FROM usuario WHERE id_rol = rol_id;
+END //
+
+DELIMITER ;
+
+DELIMITER //
+
+CREATE PROCEDURE insertar_usuario(
+    IN p_nombre_usuario VARCHAR(45),
+    IN p_contrasena VARCHAR(255),
+    IN p_id_rol INT,
+    IN p_primer_nombre VARCHAR(45),
+    IN p_segundo_nombre VARCHAR(45),
+    IN p_primer_apellido VARCHAR(45),
+    IN p_segundo_apellido VARCHAR(45),
+    IN p_correo VARCHAR(45),
+    IN p_telefono VARCHAR(12)
+)
+BEGIN
+    INSERT INTO usuario(nombre_usuario, contrasena, id_rol, primer_nombre, segundo_nombre, primer_apellido, segundo_apellido, correo, telefono)
+    VALUES (p_nombre_usuario, p_contrasena, p_id_rol, p_primer_nombre, p_segundo_nombre, p_primer_apellido, p_segundo_apellido, p_correo, p_telefono);
+END //
+
+DELIMITER ;

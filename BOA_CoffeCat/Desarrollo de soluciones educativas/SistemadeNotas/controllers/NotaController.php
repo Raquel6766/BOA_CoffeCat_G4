@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $nuevaNota = $nota->agregarNota(
                 $_POST['valor_nota'],
                 $_POST['comentarios'],
-                $_POST['id_lista'],
+                $_POST['id_lista']
 
             );
             if ($nuevaNota) {

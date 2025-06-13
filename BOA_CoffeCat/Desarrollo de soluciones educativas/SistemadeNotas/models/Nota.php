@@ -136,4 +136,20 @@ class Nota
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public function obtenerNotasPorAsignaturaDocente($id_asig_doc) {
+        $stmt = $this->conn->prepare("
+            SELECT lp.id_lista, u.nombre_usuario AS estudiante, c.grado AS curso, n.valor_nota
+            FROM lista_participante lp
+            JOIN usuario u ON lp.id_usuario_estudiante = u.id_usuario
+            JOIN asignatura_docente ad ON lp.id_asig_doc = ad.id_asig_doc
+            JOIN asignatura a ON ad.id_asignatura = a.id_asignatura
+            JOIN curso c ON a.id_curso = c.id_curso
+            LEFT JOIN nota n ON lp.id_lista = n.id_lista
+            WHERE lp.id_asig_doc = ?
+        ");
+        $stmt->execute([$id_asig_doc]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
 }

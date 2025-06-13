@@ -94,7 +94,6 @@ include '../templates/header.php';
                         <th>Nota</th>
                         <th>Comentarios</th>
                         <th>Editar</th>
-                        <th>Eliminar</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -110,9 +109,6 @@ include '../templates/header.php';
                         </td>
                         <td>
                             <button class="btn btn-primary btn-sm btn-guardar" data-id="<?= $n['id_nota'] ?>">Guardar</button>
-                        </td>
-                        <td>
-                            <button class="btn btn-danger btn-sm btn-eliminar" data-id="<?= $n['id_nota'] ?>">Eliminar</button>
                         </td>
                     </tr>
                     <?php endforeach; ?>
@@ -170,44 +166,6 @@ $(document).ready(function() {
         });
     });
 
-    // Eliminar nota AJAX
-    $('#tablaNotas').on('click', '.btn-eliminar', function() {
-        const id = $(this).data('id');
-        const fila = $(this).closest('tr');
-        Swal.fire({
-            title: '¿Estás seguro?',
-            text: "Esta acción eliminará la nota.",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
-            confirmButtonText: 'Sí, eliminar',
-            cancelButtonText: 'Cancelar'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                fetch('../../controllers/NotaController.php', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-                    body: new URLSearchParams({
-                        action: 'eliminar',
-                        id: id
-                    })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        Swal.fire('¡Eliminado!', data.message, 'success');
-                        tablaNotas.row(fila).remove().draw();
-                    } else {
-                        Swal.fire('Error', data.message, 'error');
-                    }
-                })
-                .catch(() => {
-                    Swal.fire('Error', 'No se pudo conectar con el servidor.', 'error');
-                });
-            }
-        });
-    });
 });
 
 // Modal scripts
